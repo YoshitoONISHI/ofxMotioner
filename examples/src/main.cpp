@@ -9,6 +9,7 @@ public:
     void update();
     void draw();
     
+    /// this method is called the same number of all skeletons
     void onDrawSkeleton(ofxMotioner::EventArgs &e);
     
     ofEasyCam mCam;
@@ -19,9 +20,11 @@ void ofApp::setup()
 {
     ofSetFrameRate(60);
     
+    /// setup ofxMotioner and setup OSC incoming port(argument0)
+    /// default incoming port is 10000(same as MOTIONER application)
     ofxMotioner::setup();
     
-    /// this method is called the same number of all skeletons
+    /// add callback event listener
     ofAddListener(ofxMotioner::drawSkeletonEvent, this, &ofApp::onDrawSkeleton);
 }
 
@@ -37,8 +40,12 @@ void ofApp::draw()
     ofBackgroundGradient(ofColor(50), ofColor(100));
     
     mCam.begin();
-    ofxMotioner::draw(); /// notify ofxMotioner::drawSkeletonEvent
-    //ofxMotioner::debugDraw(); /// debug drawing skeletons
+    
+    /// notify ofxMotioner::drawSkeletonEvent
+    ofxMotioner::draw();
+    /// debug drawing skeletons
+    //ofxMotioner::debugDraw();
+    
     mCam.end();
 }
 

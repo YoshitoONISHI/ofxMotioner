@@ -1,9 +1,10 @@
-## ofxMotioner
-----
+# ofxMotioner
 
 ### setup
 
-    ofxMotioner::setup(10000); /// argument0: osc incoming port(default = 10000)
+    /// setup ofxMotioner and setup OSC incoming port(argument0)
+    /// default incoming port is 10000(same as MOTIONER application)
+    ofxMotioner::setup(10000);
     
 ### update
 
@@ -34,6 +35,7 @@ draw all skeletons
 	void ofApp::setup()
 	{	    
 	    ofxMotioner::setup();   
+	    // add callback event listener
 	    ofAddListener(ofxMotioner::drawSkeletonEvent, this, &ofApp::onDrawSkeleton);
 	}
 	
