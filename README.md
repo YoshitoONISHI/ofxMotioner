@@ -1,5 +1,7 @@
 # ofxMotioner
 
+An addon to use MOTIONER which is open source intertial motion capture system easily in openFrameworks.
+
 ### setup
 
     /// setup ofxMotioner and setup OSC incoming port(argument0)
