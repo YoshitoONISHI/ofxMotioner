@@ -21,6 +21,7 @@ void ofApp::setup()
     
     ofxMotioner::setup();
     
+    /// this method is called the same number of all skeletons
     ofAddListener(ofxMotioner::drawSkeletonEvent, this, &ofApp::onDrawSkeleton);
 }
 
@@ -36,8 +37,8 @@ void ofApp::draw()
     ofBackgroundGradient(ofColor(50), ofColor(100));
     
     mCam.begin();
-    ofxMotioner::draw(); // notified ofxMotioner::drawSkeletonEvent
-    //ofxMotioner::debugDraw(); // debug drawing skeletons
+    ofxMotioner::draw(); /// notify ofxMotioner::drawSkeletonEvent
+    //ofxMotioner::debugDraw(); /// debug drawing skeletons
     mCam.end();
 }
 
@@ -48,21 +49,26 @@ void ofApp::onDrawSkeleton(ofxMotioner::EventArgs &e)
     ofPushStyle();
     
     ofxMotioner::SkeletonPtr skeleton = e.skeleton;
+    
     ofxMotioner::NodeVec &joints = skeleton->getJoints();
     
     ofNoFill();
+    ofSetLineWidth(1.0f);
     
     for (size_t i=0; i<joints.size(); i++) {
         
         ofSetColor(ofColor::red);
         
-        ofSetLineWidth(1.0f);
-        ofxMotioner::Node &n = skeleton->getJoint(i);
+        ofxMotioner::Node &n = joints.at(i);
+        
+        /// draw node
         n.draw();
         
         if (!n.getParent()) continue;
         
         ofSetColor(ofColor::green);
+        
+        /// draw line
         ofLine(n.getGlobalPosition(), n.getParent()->getGlobalPosition());
     }
 
