@@ -76,7 +76,9 @@ draw all skeletons
     
     
 ### ofxMotioner::Node
+
 `ofxMotioner::Node` inherit from `ofNode`
+
 `ofxMotioner::NodeVec` is typedef of `std::vector<ofxMotioner::Node>`
 
 	// this method is called the same number of all skeletons
