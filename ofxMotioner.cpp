@@ -14,7 +14,6 @@ namespace ofxMotioner {
     static map<string, SkeletonPtr > skeletons;
     
     static void updateWithOscMessage(ofxOscMessage &m);
-    static void drawSkeleton(SkeletonPtr s);
     
     ofEvent<EventArgs> drawSkeletonEvent;;
     
@@ -60,7 +59,7 @@ namespace ofxMotioner {
     void debugDraw()
     {
         for (SkeletonMap::iterator it = skeletons.begin(); it!=skeletons.end(); ++it) {
-            drawSkeleton(it->second);
+            drawSkeleton(DRAW_SKELETON_BASIC, it->second);
         }
     }
     
@@ -108,7 +107,7 @@ namespace ofxMotioner {
         }
     }
     
-    void drawSkeleton(SkeletonPtr skl)
+    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr s)
     {
         ofPushMatrix();
         ofPushStyle();

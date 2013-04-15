@@ -26,6 +26,13 @@ namespace ofxMotioner {
     void draw();
     void debugDraw();
     
+    enum DrawSkeletonType {
+        DRAW_SKELETON_BASIC,
+        //DRAW_SKELETON_SHADED,
+    };
+    
+    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr s);
+    
     struct EventArgs {
         SkeletonPtr skeleton;
     };
