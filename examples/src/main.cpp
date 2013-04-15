@@ -9,7 +9,12 @@ public:
     void update();
     void draw();
     
-    /// this method is called the same number of all skeletons
+    /// this method is called when a skeleton is created or deleted
+    void onSetupSkeleton(ofxMotioner::EventArgs &e);
+    void onExitSkeleton(ofxMotioner::EventArgs &e);
+    
+    /// those method is called the same number of all skeletons
+    void onUpdateSkeleton(ofxMotioner::EventArgs &e);
     void onDrawSkeleton(ofxMotioner::EventArgs &e);
     
     ofEasyCam mCam;
@@ -25,6 +30,10 @@ void ofApp::setup()
     ofxMotioner::setup();
     
     /// add callback event listener
+    ofAddListener(ofxMotioner::setupSkeletonEvent, this, &ofApp::onSetupSkeleton);
+    ofAddListener(ofxMotioner::exitSkeletonEvent, this, &ofApp::onExitSkeleton);
+    
+    ofAddListener(ofxMotioner::updateSkeletonEvent, this, &ofApp::onUpdateSkeleton);
     ofAddListener(ofxMotioner::drawSkeletonEvent, this, &ofApp::onDrawSkeleton);
 }
 
@@ -47,6 +56,23 @@ void ofApp::draw()
     //ofxMotioner::debugDraw();
     
     mCam.end();
+}
+
+//----------------------------------------------------------------------------------------
+void ofApp::onSetupSkeleton(ofxMotioner::EventArgs &e)
+{
+    ofLogNotice() << "a new skeleton '" << e.skeleton->getName() << "' did create";
+}
+
+//----------------------------------------------------------------------------------------
+void ofApp::onExitSkeleton(ofxMotioner::EventArgs &e)
+{
+    ofLogNotice() << "a skeleton '" << e.skeleton->getName() << "' will delete";
+}
+
+//----------------------------------------------------------------------------------------
+void ofApp::onUpdateSkeleton(ofxMotioner::EventArgs &e)
+{
 }
 
 //----------------------------------------------------------------------------------------

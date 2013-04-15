@@ -12,11 +12,15 @@ namespace ofxMotioner {
     
     static ofxOscReceiver oscReceiver;
     static map<string, SkeletonPtr > skeletons;
+
+    ofEvent<EventArgs> setupSkeletonEvent;
+    ofEvent<EventArgs> updateSkeletonEvent;
+    ofEvent<EventArgs> drawSkeletonEvent;
+    ofEvent<EventArgs> exitSkeletonEvent;
+    
     
     static void updateWithOscMessage(ofxOscMessage &m);
-    
-    ofEvent<EventArgs> drawSkeletonEvent;;
-    
+
     
     void setup(int oscIncomingPort)
     {
@@ -26,6 +30,8 @@ namespace ofxMotioner {
     
     void update()
     {
+        static EventArgs args;
+        
         while (oscReceiver.hasWaitingMessages()) {
             ofxOscMessage m;
             oscReceiver.getNextMessage(&m);
@@ -36,11 +42,14 @@ namespace ofxMotioner {
         
         while (it != skeletons.end()) {
             SkeletonPtr skl = it->second;
-                    
-            if (ofGetElapsedTimef() - skl->timestamp >= 1.0) {
+            args.skeleton = skl;
+            
+            if (ofGetElapsedTimef() - skl->timestamp >= TIME_OUT_DUR) {
+                ofNotifyEvent(exitSkeletonEvent, args);
                 skeletons.erase(it++);
             }
             else {
+                ofNotifyEvent(updateSkeletonEvent, args);
                 ++it;
             }
         }
@@ -65,6 +74,8 @@ namespace ofxMotioner {
     
     void updateWithOscMessage(ofxOscMessage &m)
     {
+        static EventArgs args;
+        
         if (m.getAddress() == OSC_ADDR) {
             
             const string name = m.getArgAsString(0);
@@ -73,6 +84,9 @@ namespace ofxMotioner {
                 SkeletonPtr newSkl = SkeletonPtr(new Skeleton);
                 newSkl->setName(name);
                 skeletons.insert(make_pair(name, newSkl));
+                
+                args.skeleton = newSkl;
+                ofNotifyEvent(setupSkeletonEvent, args);
             }
             
             SkeletonPtr skl = skeletons[name];

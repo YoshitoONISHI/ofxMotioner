@@ -23,5 +23,5 @@ namespace ofxMotioner {
 
     const string OSC_ADDR = "/ram/skeleton";
     
-    float TIME_OUT_DUR = 1.0f;
+    float TIME_OUT_DUR = 0.5f;
 }

@@ -36,8 +36,12 @@ namespace ofxMotioner {
     struct EventArgs {
         SkeletonPtr skeleton;
     };
-        
+    
+    extern ofEvent<EventArgs> setupSkeletonEvent;
+    extern ofEvent<EventArgs> updateSkeletonEvent;
     extern ofEvent<EventArgs> drawSkeletonEvent;
+    extern ofEvent<EventArgs> exitSkeletonEvent;
+    
 }
 
 #endif /* defined(__ofxMotioner__ofxMotioner__) */
