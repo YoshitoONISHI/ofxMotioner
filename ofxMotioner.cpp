@@ -29,9 +29,7 @@ namespace ofxMotioner {
     }
     
     void update()
-    {
-        static EventArgs args;
-        
+    {        
         while (oscReceiver.hasWaitingMessages()) {
             ofxOscMessage m;
             oscReceiver.getNextMessage(&m);
@@ -42,6 +40,8 @@ namespace ofxMotioner {
         
         while (it != skeletons.end()) {
             SkeletonPtr skl = it->second;
+            
+            EventArgs args;
             args.skeleton = skl;
             
             if (ofGetElapsedTimef() - skl->timestamp >= TIME_OUT_DUR) {
@@ -57,9 +57,8 @@ namespace ofxMotioner {
     
     void draw()
     {
-        static EventArgs args;
-        
         for (SkeletonMap::iterator it = skeletons.begin(); it!=skeletons.end(); ++it) {
+            EventArgs args;
             args.skeleton = it->second;
             ofNotifyEvent(drawSkeletonEvent, args);
         }
@@ -73,9 +72,7 @@ namespace ofxMotioner {
     }
     
     void updateWithOscMessage(ofxOscMessage &m)
-    {
-        static EventArgs args;
-        
+    {        
         if (m.getAddress() == OSC_ADDR) {
             
             const string name = m.getArgAsString(0);
@@ -85,6 +82,7 @@ namespace ofxMotioner {
                 newSkl->setName(name);
                 skeletons.insert(make_pair(name, newSkl));
                 
+                EventArgs args;
                 args.skeleton = newSkl;
                 ofNotifyEvent(setupSkeletonEvent, args);
             }
