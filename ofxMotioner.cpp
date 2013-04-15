@@ -107,7 +107,7 @@ namespace ofxMotioner {
         }
     }
     
-    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr s)
+    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr skl)
     {
         ofPushMatrix();
         ofPushStyle();

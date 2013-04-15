@@ -31,7 +31,7 @@ namespace ofxMotioner {
         //DRAW_SKELETON_SHADED,
     };
     
-    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr s);
+    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr skl);
     
     struct EventArgs {
         SkeletonPtr skeleton;
