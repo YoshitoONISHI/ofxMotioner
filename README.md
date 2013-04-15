@@ -4,7 +4,7 @@
 
     /// setup ofxMotioner and setup OSC incoming port(argument0)
     /// default incoming port is 10000(same as MOTIONER application)
-    ofxMotioner::setup(10000);
+    ofxMotioner::setup(/*10000*/);
     
 ### update
 
