@@ -15,33 +15,34 @@
 #include "ofxMotionerSkeleton.h"
 
 #include "ofMain.h"
-#include "ofxOscReceiver.h"
+#include "ofxOscMessage.h"
 
-namespace ofxMot = ofxMotioner;
+OFX_MOTIONER_NAMESPACE_BEGIN
 
-namespace ofxMotioner {
-    
-    void setup(int oscIncomingPort = 10000);
-    void update();
-    void draw();
-    void debugDraw();
-    
-    enum DrawSkeletonType {
-        DRAW_SKELETON_BASIC,
-        //DRAW_SKELETON_SHADED,
-    };
-    
-    void drawSkeleton(DrawSkeletonType drawType, SkeletonPtr skl);
-    
-    struct EventArgs {
-        SkeletonPtr skeleton;
-    };
-    
-    extern ofEvent<EventArgs> setupSkeletonEvent;
-    extern ofEvent<EventArgs> updateSkeletonEvent;
-    extern ofEvent<EventArgs> drawSkeletonEvent;
-    extern ofEvent<EventArgs> exitSkeletonEvent;
-    
-}
+enum DrawSkeletonType {
+    DRAW_SKELETON_BASIC,
+    //DRAW_SKELETON_SHADED,
+};
+
+void updateWithOscMessage(ofxOscMessage &m);
+void update();
+void draw();
+void debugDraw();
+void drawSkeleton(SkeletonPtr skl,
+                  DrawSkeletonType drawType = DRAW_SKELETON_BASIC);
+
+SkeletonMap& getSkeletons();
+
+struct EventArgs {
+    SkeletonPtr skeleton;
+};
+
+extern ofEvent<EventArgs> setupSkeletonEvent;
+extern ofEvent<EventArgs> updateSkeletonEvent;
+extern ofEvent<EventArgs> drawSkeletonEvent;
+extern ofEvent<EventArgs> exitSkeletonEvent;
+
+
+OFX_MOTIONER_NAMESPACE_END
 
 #endif /* defined(__ofxMotioner__ofxMotioner__) */

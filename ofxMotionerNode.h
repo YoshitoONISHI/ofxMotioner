@@ -10,34 +10,38 @@
 #define __ofxMotioner__Node__
 
 #include "ofMain.h"
+#include "ofxMotionerConstants.h"
 
-namespace ofxMotioner {
+OFX_MOTIONER_NAMESPACE_BEGIN
 
-    //------------------------------------------------------------------------------------
-    struct Node : public ofNode {
-        Node();
-        void customDraw();
-        
-        string name;
-        int id;
-        float size;
-    };
+#pragma mark ___________________________________________________________________
+struct Node : public ofNode {
+    Node();
+    virtual ~Node() {}
     
-    //------------------------------------------------------------------------------------
-    struct NodeFinder {
-        NodeFinder(const string &name);
-        NodeFinder(int id);
-        
-        bool operator ()(const Node &n);
-        
-        enum Mode { NAME, ID, };
-        
-        string name;
-        int id;
-        Mode mode;
-    };
+    void customDraw();
     
-    typedef vector<ofxMotioner::Node> NodeVec;
-}
+    string name;
+    int id;
+    float size;
+};
+
+#pragma mark ___________________________________________________________________
+struct NodeFinder {
+    NodeFinder(const string &name);
+    NodeFinder(int id);
+    
+    bool operator ()(const Node &n);
+    
+    enum Mode { NAME, ID, };
+    
+    string name;
+    int id;
+    Mode mode;
+};
+
+typedef vector<ofxMotioner::Node> NodeVec;
+
+OFX_MOTIONER_NAMESPACE_END
 
 #endif /* defined(__ofxMotioner__Node__) */

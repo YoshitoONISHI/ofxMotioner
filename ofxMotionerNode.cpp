@@ -9,33 +9,30 @@
 #include "ofxMotionerNode.h"
 
 
-using namespace ofxMotioner;
+OFX_MOTIONER_NAMESPACE_BEGIN
 
-//----------------------------------------------------------------------------------------
+#pragma mark ___________________________________________________________________
 Node::Node() :
 size(5.0f)
 {
     
 }
 
-//----------------------------------------------------------------------------------------
 void Node::customDraw()
 {
-    ofBox(size);
+    ofDrawBox(size);
     ofDrawAxis(size);
 }
 
-//----------------------------------------------------------------------------------------
+#pragma mark ___________________________________________________________________
 NodeFinder::NodeFinder(const string &name) : name(name), id(0), mode(NAME)
 {
 }
 
-//----------------------------------------------------------------------------------------
 NodeFinder::NodeFinder(int id) : id(id), name(""), mode(ID)
 {
 }
 
-//----------------------------------------------------------------------------------------
 bool NodeFinder::operator ()(const Node &n)
 {
     switch (mode) {
@@ -43,3 +40,5 @@ bool NodeFinder::operator ()(const Node &n)
         case ID: return (n.id == id);
     }
 }
+
+OFX_MOTIONER_NAMESPACE_END

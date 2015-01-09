@@ -11,14 +11,15 @@
 
 #include <iostream>
 #include <string>
+#include "ofxMotionerConstants.h"
 
-namespace ofxMotioner {
- 
-    std::string getJointName(int index);
-    int getJointIndex(const std::string &name);
-    
-    bool isEndSite(int nodeId);
-    
-}
+OFX_MOTIONER_NAMESPACE_BEGIN
+
+std::string getJointName(int index);
+int getJointIndex(const std::string &name);
+
+bool isEndSite(int nodeId);
+
+OFX_MOTIONER_NAMESPACE_END
 
 #endif /* defined(__ofxMotioner__Utils__) */
