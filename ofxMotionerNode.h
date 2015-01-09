@@ -19,7 +19,7 @@ struct Node : public ofNode {
     Node();
     virtual ~Node() {}
     
-    void customDraw();
+    virtual void customDraw();
     
     string name;
     int id;
