@@ -15,8 +15,30 @@ Skeleton::Skeleton() :
 timestamp(0.0f),
 mName("")
 {
+    mJoints.clear();
+    mJoints.assign(NUM_JOINTS, Node());
+    
     createTree();
 }
+
+Skeleton::Skeleton(const Skeleton& rhs)
+{
+    copy(rhs);
+}
+
+Skeleton& Skeleton::operator = (const Skeleton& rhs)
+{
+    return copy(rhs);
+}
+
+Skeleton& Skeleton::copy(const Skeleton& rhs)
+{
+    mName = rhs.mName;
+    mJoints = rhs.mJoints;
+    createTree();
+    return *this;
+}
+
 
 #pragma mark ___________________________________________________________________
 vector<Node> &Skeleton::getJoints()
@@ -59,9 +81,6 @@ const string &Skeleton::getName() const
 #pragma mark ___________________________________________________________________
 void Skeleton::createTree()
 {
-    mJoints.clear();
-    mJoints.assign(NUM_JOINTS, Node());
-    
     mJoints.at(JOINT_ABDOMEN).setParent(mJoints.at(JOINT_HIPS));
     {
         mJoints.at(JOINT_CHEST).setParent(mJoints.at(JOINT_ABDOMEN));
@@ -122,6 +141,16 @@ void Skeleton::createTree()
             }
         }
     }
+}
+
+SkeletonPtr copySkeleton(const SkeletonPtr rhs)
+{
+    SkeletonPtr ret = SkeletonPtr(new Skeleton());
+    ret->mName = rhs->mName;
+    ret->mJoints = rhs->mJoints;
+    ret->createTree();
+    
+    return ret;
 }
 
 OFX_MOTIONER_NAMESPACE_END
