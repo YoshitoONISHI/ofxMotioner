@@ -50,10 +50,7 @@ SkeletonPtr copySkeleton(const SkeletonPtr rhs);
 
 template<class NodeClass>
 void createTree(vector<NodeClass>& joints)
-{
-    joints.clear();
-    joints.assign(NUM_JOINTS, Node());
-    
+{    
     joints.at(JOINT_ABDOMEN).setParent(joints.at(JOINT_HIPS));
     {
         joints.at(JOINT_CHEST).setParent(joints.at(JOINT_ABDOMEN));
