@@ -16,10 +16,6 @@
 
 OFX_MOTIONER_NAMESPACE_BEGIN
 
-class Skeleton;
-
-typedef ofPtr<Skeleton> SkeletonPtr;
-typedef map<string, ofPtr<Skeleton> > SkeletonMap;
 
 /// skeleton joints
 //--------------------

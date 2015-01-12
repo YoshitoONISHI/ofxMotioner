@@ -16,41 +16,144 @@
 
 OFX_MOTIONER_NAMESPACE_BEGIN
 
-class Skeleton {
-    friend SkeletonPtr copySkeleton(const SkeletonPtr rhs);
+template<class NodeType> class SkeletonBase;
+
+typedef SkeletonBase<Node> Skeleton;
+typedef ofPtr<Skeleton> SkeletonPtr;
+typedef map<string, ofPtr<Skeleton> > SkeletonMap;
+
+
+template<class NodeType>
+ofPtr<SkeletonBase<NodeType> > copySkeleton(const ofPtr<SkeletonBase<NodeType> > rhs);
+
+template<class NodeType>
+class SkeletonBase {
 public:
-    Skeleton();
-    virtual ~Skeleton() {}
-    Skeleton(const Skeleton& rhs);
-    Skeleton& operator = (const Skeleton& rhs);
+    typedef ofPtr<SkeletonBase<NodeType> > Ptr;
     
-    vector<Node> &getJoints();
-    const vector<Node> &getJoints() const;
+    static Ptr create();
     
-    Node &getJoint(int id);
-    const Node &getJoint(int id) const;
+    SkeletonBase();
+    virtual ~SkeletonBase();
+    SkeletonBase(const SkeletonBase& rhs);
+    SkeletonBase& operator = (const SkeletonBase& rhs);
+    
+    vector<NodeType> &getJoints();
+    const vector<NodeType> &getJoints() const;
+    
+    NodeType &getJoint(int id);
+    const NodeType &getJoint(int id) const;
     
     int getNumJoints() const;
     
     void setName(const string &name);
     const string &getName() const;
     
+    template<class NodeTypeRhs>
+    void copyMatrices(ofPtr<SkeletonBase<NodeTypeRhs> > rhs);
+    
+    static void createTree(vector<NodeType>& joints);
+    static ofPtr<SkeletonBase<NodeType> > copy(const ofPtr<SkeletonBase<NodeType> > rhs);
+    
     float timestamp;
     
-private:
-    Skeleton& copy(const Skeleton& rhs);
-    void createTree();
+protected:
+    SkeletonBase& copy(const SkeletonBase& rhs);
     
-    vector<Node> mJoints;
+private:
+    vector<NodeType> mJoints;
     string mName;
     
 };
 
-SkeletonPtr copySkeleton(const SkeletonPtr rhs);
+template<class NodeType>
+typename SkeletonBase<NodeType>::Ptr SkeletonBase<NodeType>::create()
+{
+    return SkeletonBase<NodeType>::Ptr(new SkeletonBase<NodeType>());
+}
 
-template<class NodeClass>
-void createTree(vector<NodeClass>& joints)
-{    
+template<class NodeType>
+SkeletonBase<NodeType>::SkeletonBase() :
+timestamp(0.f),
+mName("")
+{
+    mJoints.clear();
+    mJoints.assign(NUM_JOINTS, NodeType());
+    createTree(mJoints);
+}
+
+template<class NodeType>
+SkeletonBase<NodeType>::~SkeletonBase() {}
+
+template<class NodeType>
+SkeletonBase<NodeType>::SkeletonBase(const SkeletonBase& rhs)
+{
+    copy(rhs);
+}
+
+template<class NodeType>
+SkeletonBase<NodeType>& SkeletonBase<NodeType>::operator = (const SkeletonBase& rhs)
+{
+    return copy(rhs);
+}
+
+template<class NodeType>
+vector<NodeType>& SkeletonBase<NodeType>::getJoints()
+{
+    return mJoints;
+}
+
+template<class NodeType>
+const vector<NodeType>& SkeletonBase<NodeType>::getJoints() const
+{
+    return mJoints;
+}
+
+template<class NodeType>
+NodeType& SkeletonBase<NodeType>::getJoint(int id)
+{
+    return mJoints.at(id);
+}
+
+template<class NodeType>
+const NodeType& SkeletonBase<NodeType>::getJoint(int id) const
+{
+    return mJoints.at(id);
+}
+
+template<class NodeType>
+int SkeletonBase<NodeType>::getNumJoints() const
+{
+    return mJoints.size();
+}
+
+template<class NodeType>
+void SkeletonBase<NodeType>::setName(const string &name)
+{
+    mName = name;
+}
+
+template<class NodeType>
+const string& SkeletonBase<NodeType>::getName() const
+{
+    return mName;
+}
+
+template<class NodeType>
+template<class NodeTypeRhs>
+void SkeletonBase<NodeType>::copyMatrices(ofPtr<SkeletonBase<NodeTypeRhs> > rhs)
+{
+    assert(mJoints.size() == rhs->getJoints().size());
+    
+    for (int i=0; i<mJoints.size(); i++) {
+        mJoints.at(i).setTransformMatrix(rhs->getJoint(i).getLocalTransformMatrix());
+        mJoints.at(i).id = rhs->getJoint(i).id;
+    }
+}
+
+template<class NodeType>
+void SkeletonBase<NodeType>::createTree(vector<NodeType>& joints)
+{
     joints.at(JOINT_ABDOMEN).setParent(joints.at(JOINT_HIPS));
     {
         joints.at(JOINT_CHEST).setParent(joints.at(JOINT_ABDOMEN));
@@ -111,6 +214,26 @@ void createTree(vector<NodeClass>& joints)
             }
         }
     }
+}
+
+template<class NodeType>
+SkeletonBase<NodeType>& SkeletonBase<NodeType>::copy(const SkeletonBase<NodeType>& rhs)
+{
+    mName = rhs.mName;
+    mJoints = rhs.mJoints;
+    createTree(mJoints);
+    return *this;
+}
+
+template<class NodeType>
+ofPtr<SkeletonBase<NodeType> > SkeletonBase<NodeType>::copy(const ofPtr<SkeletonBase<NodeType> > rhs)
+{
+    SkeletonPtr ret = SkeletonPtr(new Skeleton());
+    ret->mName = rhs->mName;
+    ret->mJoints = rhs->mJoints;
+    ret->createTree(ret->mJoints);
+    
+    return ret;
 }
 
 OFX_MOTIONER_NAMESPACE_END
