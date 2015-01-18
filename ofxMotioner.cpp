@@ -105,47 +105,6 @@ void debugDraw()
     }
 }
 
-
-
-void drawSkeleton(SkeletonPtr skl, DrawSkeletonType drawType)
-{
-    ofPushMatrix();
-    ofPushStyle();
-    glPushAttrib(GL_ENABLE_BIT);
-    
-    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
-    
-    vector<Node> &joints = skl->getJoints();
-    
-    ofNoFill();
-    
-    for (size_t i=0; i<joints.size(); i++) {
-        
-        ofSetColor(ofColor::magenta);
-        
-        ofSetLineWidth(1.0f);
-        Node &n = skl->getJoint(i);
-        n.draw();
-        
-        if (!n.getParent()) continue;
-        
-        ofSetColor(ofColor::cyan);
-        ofLine(n.getGlobalPosition(), n.getParent()->getGlobalPosition());
-    }
-    
-    ofPushMatrix();
-    ofSetColor(ofColor::yellow);
-    ofMultMatrix(joints.at(JOINT_HEAD).getGlobalTransformMatrix());
-    ofDrawBitmapString(skl->getName(),
-                       ofPoint(0.0f, joints.at(JOINT_HEAD).size));
-    ofPopMatrix();
-    
-    glPopAttrib();
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
 SkeletonMap& getSkeletons()
 {
     return skeletons;
